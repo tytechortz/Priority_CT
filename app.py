@@ -96,22 +96,22 @@ def get_figure(selected_data):
     # print(sel_dict)
     df = pd.read_json(selected_data)
     df['FIPS'] = df["FIPS"].astype(str)
-    print(df.dtypes['FIPS'])
+    
     # df2 = pd.DataFrame.from_dict(sel_dict, orient='index', columns=['Count'])
     # df2 = df2.iloc[1: , :]
     # df2.index.names = ['FIPS']
     tgdf = gdf.merge(df, on='FIPS')
-    tgdf['Count'] = tgdf['Count'].str.replace(",", "")
-    tgdf.fillna(0,inplace=True)
-    tgdf['Count'] = (tgdf['Count'].astype(int))
+    # tgdf['Count'] = tgdf['Count'].str.replace(",", "")
+    # tgdf.fillna(0,inplace=True)
+    # tgdf['Count'] = (tgdf['Count'].astype(int))
     tgdf = tgdf.set_index('FIPS')
-    # print(tgdf)
+    print(tgdf)
 
     
 
     fig = px.choropleth_mapbox(tgdf, 
                                 geojson=tgdf.geometry, 
-                                color="Count",                               
+                                color="MP_AGE65",                               
                                 locations=tgdf.index, 
                                 # featureidkey="properties.TRACTCE20",
                                 opacity=0.5)
