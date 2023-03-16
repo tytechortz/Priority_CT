@@ -137,7 +137,7 @@ def get_figure(selected_data, radio, opacity):
                                 # featureidkey="properties.TRACTCE20",
                                 opacity=opacity)
 
-    fig.update_layout(mapbox_style="carto-positron", 
+    fig.update_layout(mapbox_style="open-street-map", 
                       mapbox_zoom=10.4,
                       mapbox_center={"lat": 39.65, "lon": -104.8},
                       margin={"r":0,"t":0,"l":0,"b":0},
