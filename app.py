@@ -69,7 +69,23 @@ app.layout = dbc.Container(
         dbc.Row(dcc.Graph(id='ct-map', figure=blank_fig(500))),
         dbc.Row(dcc.RadioItems(
                 id='radio',
-                options=['SVI', 'Income', 'Households'], inline=True,
+                options=[
+                        {'label':'S.E. Status', 'value': 'RPL_THEME1'},
+                        {'label':'Household Char.', 'value': 'RPL_THEME2'},
+                        {'label':'Race/Eth Minority', 'value': 'RPL_THEME3'},
+                        {'label':'Housing and Transportation', 'value': 'RPL_THEME4'},
+                        {'label':'Povery Flag', 'value': 'F_POV150'},
+                        {'label':'Uninsured Flag', 'value': 'F_UNINSUR'},
+                        {'label':'65+ Flag', 'value': 'F_AGE65'},
+                        ], inline=True,
+            ),
+        ),
+        dbc.Row(dcc.Slider(
+                id = 'opacity',
+                min = 0,
+                max = 1,
+                value = 1,
+                # marks = {i for i in range(2020,2022)}
             ),
         ),
         dbc.Row(dbc.Col(table, className="py-4")),
@@ -82,20 +98,25 @@ app.layout = dbc.Container(
     Input('radio', 'value'),
 )
 def get_data(radio):
-    if radio == 'SVI':
-        df = df_SVI
+    if radio == 'S.E. Status':
+
+        df = df_SVI[df_SVI['THEME'] == 1]
     return df.to_json()
 
 @app.callback(
     Output('ct-map', 'figure'),
-    Input('map-data', 'data')
+    Input('map-data', 'data'),
+    Input('radio', 'value'),
+    Input('opacity', 'value')
 )
-def get_figure(selected_data):
+def get_figure(selected_data, radio, opacity):
     # sel_dict = selected_row[0]
     # del sel_dict['Label']
     # print(sel_dict)
     df = pd.read_json(selected_data)
     df['FIPS'] = df["FIPS"].astype(str)
+
+    selection = radio
     
     # df2 = pd.DataFrame.from_dict(sel_dict, orient='index', columns=['Count'])
     # df2 = df2.iloc[1: , :]
@@ -111,10 +132,10 @@ def get_figure(selected_data):
 
     fig = px.choropleth_mapbox(tgdf, 
                                 geojson=tgdf.geometry, 
-                                color="MP_AGE65",                               
+                                color=selection,                               
                                 locations=tgdf.index, 
                                 # featureidkey="properties.TRACTCE20",
-                                opacity=0.5)
+                                opacity=opacity)
 
     fig.update_layout(mapbox_style="carto-positron", 
                       mapbox_zoom=10.4,
