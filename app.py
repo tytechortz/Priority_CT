@@ -15,10 +15,17 @@ header = html.Div("Arapahoe Census Tract Data", className="h2 p-2 text-white bg-
 template = {"layout": {"paper_bgcolor": bgcolor, "plot_bgcolor": bgcolor}}
 
 gdf = gpd.read_file('ArapahoeCT.shp')
-print(gdf)
+# print(gdf)
 
 
 df_SVI = pd.read_csv('Colorado_SVI.csv')
+# df_SVI = df_SVI.iloc[:, []]
+# print(df_SVI.columns)
+col_list = list(df_SVI)
+print(col_list)
+categories = list(filter(lambda x: not x.startswith('E'), col_list))
+categories = categories[8:]
+print(categories)
 
 columnDefs = [
     {
@@ -80,6 +87,13 @@ app.layout = dbc.Container(
                         ], inline=True,
             ),
         ),
+        # dbc.Row(dcc.Dropdown(
+        #         id='dropdown',
+        #         options=[
+        #             {'label': i, 'value': i} for i in 
+        #         ]             
+        #     ),
+        # ),
         dbc.Row(dcc.Slider(
                 id = 'opacity',
                 min = 0,
@@ -98,9 +112,12 @@ app.layout = dbc.Container(
     Input('radio', 'value'),
 )
 def get_data(radio):
-    if radio == 'S.E. Status':
+    df = df_SVI
+    print(df)
+    # df = df_SVI[df_SVI[]]
+    # if radio == 'S.E. Status':
 
-        df = df_SVI[df_SVI['THEME'] == 1]
+    #     df = df_SVI[df_SVI['THEME'] == 1]
     return df.to_json()
 
 @app.callback(
@@ -115,7 +132,7 @@ def get_figure(selected_data, radio, opacity):
     # print(sel_dict)
     df = pd.read_json(selected_data)
     df['FIPS'] = df["FIPS"].astype(str)
-
+    
     selection = radio
     
     # df2 = pd.DataFrame.from_dict(sel_dict, orient='index', columns=['Count'])
@@ -126,7 +143,7 @@ def get_figure(selected_data, radio, opacity):
     # tgdf.fillna(0,inplace=True)
     # tgdf['Count'] = (tgdf['Count'].astype(int))
     tgdf = tgdf.set_index('FIPS')
-    print(tgdf)
+    # print(tgdf)
 
     
 
