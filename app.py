@@ -74,6 +74,14 @@ app.layout = dbc.Container(
     [
         header,
         dbc.Row(dcc.Graph(id='ct-map', figure=blank_fig(500))),
+        dbc.Row(dcc.Slider(
+                id = 'opacity',
+                min = 0,
+                max = 1,
+                value = 1,
+                # marks = {i for i in range(2020,2022)}
+            ),
+        ),
         dbc.Row(dcc.RadioItems(
                 id='radio',
                 options=[
@@ -94,15 +102,8 @@ app.layout = dbc.Container(
                 ]             
             ),
         ),
-        dbc.Row(dcc.Slider(
-                id = 'opacity',
-                min = 0,
-                max = 1,
-                value = 1,
-                # marks = {i for i in range(2020,2022)}
-            ),
-        ),
-        dbc.Row(dbc.Col(table, className="py-4")),
+        
+        # dbc.Row(dbc.Col(table, className="py-4")),
         dcc.Store(id='map-data', storage_type='session'),
     ],
 )
