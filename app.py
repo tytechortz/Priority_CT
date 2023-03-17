@@ -22,10 +22,10 @@ df_SVI = pd.read_csv('Colorado_SVI.csv')
 # df_SVI = df_SVI.iloc[:, []]
 # print(df_SVI.columns)
 col_list = list(df_SVI)
-print(col_list)
+# print(col_list)
 categories = list(filter(lambda x: not x.startswith('E'), col_list))
 categories = categories[8:]
-print(categories)
+# print(categories)
 
 columnDefs = [
     {
@@ -87,13 +87,13 @@ app.layout = dbc.Container(
                         ], inline=True,
             ),
         ),
-        # dbc.Row(dcc.Dropdown(
-        #         id='dropdown',
-        #         options=[
-        #             {'label': i, 'value': i} for i in 
-        #         ]             
-        #     ),
-        # ),
+        dbc.Row(dcc.Dropdown(
+                id='dropdown',
+                options=[
+                    {'label': i, 'value': i} for i in categories
+                ]             
+            ),
+        ),
         dbc.Row(dcc.Slider(
                 id = 'opacity',
                 min = 0,
