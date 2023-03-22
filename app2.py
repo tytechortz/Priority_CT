@@ -23,7 +23,7 @@ df_SVI = pd.read_csv('Colorado_SVI.csv')
 # print(df_SVI.columns)
 col_list = list(df_SVI)
 # print(col_list)
-categories = list(filter(lambda x: not x.startswith('E'), col_list))
+categories = list(filter(lambda x: not x.startswith('M'), col_list))
 categories = categories[8:]
 # print(categories)
 
@@ -95,13 +95,23 @@ app.layout = dbc.Container(
                         ], inline=True,
             ),
         ),
-        dbc.Row(dcc.Dropdown(
-                id='dropdown',
-                options=[
-                    {'label': i, 'value': i} for i in categories
-                ]             
-            ),
-        ),
+        dbc.Row([
+            dbc.Col([
+                dcc.Dropdown(
+                    id='dropdown',
+                    options=[
+                        {'label': i, 'value': i} for i in categories
+                    ] 
+                ),
+            ], width=6)
+        ]),
+        # dbc.Row(dcc.Dropdown(
+        #         id='dropdown',
+        #         options=[
+        #             {'label': i, 'value': i} for i in categories
+        #         ]             
+        #     ),
+        # ),
         
         # dbc.Row(dbc.Col(table, className="py-4")),
         dcc.Store(id='map-data', storage_type='session'),
@@ -113,7 +123,7 @@ app.layout = dbc.Container(
     Input('radio', 'value'),
 )
 def get_data(radio):
-    df = df_SVI
+    df = df_SVI.loc[df_SVI['COUNTY'] == 'Arapahoe']
     print(df)
     # df = df_SVI[df_SVI[]]
     # if radio == 'S.E. Status':
