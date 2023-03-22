@@ -130,11 +130,26 @@ app.layout = dbc.Container(
     ],
 )
 
+
+
 @app.callback(
     Output('map-data', 'data'),
     Input('radio', 'value'),
 )
 def get_data(radio):
+    # if radio == 'Total':
+    #     cat = 'E_'
+    # elif radio == 'Pct':
+    #     cat = 'EP_'
+    # elif radio == 'Percentile':
+    #     cat = 'EPL_'
+    # elif radio == 'Flag':
+    #     cat = 'F_'
+
+    #     categories = list(filter(lambda x: x.startswith(cat), col_list))
+    #     categories = categories[8:]
+
+
     df = df_SVI.loc[df_SVI['COUNTY'] == 'Arapahoe']
     print(df)
     # df = df_SVI[df_SVI[]]
