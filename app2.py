@@ -82,20 +82,30 @@ app.layout = dbc.Container(
                 # marks = {i for i in range(2020,2022)}
             ),
         ),
-        dbc.Row(dcc.RadioItems(
-                id='radio',
-                options=[
-                        {'label':'S.E. Status', 'value': 'RPL_THEME1'},
-                        {'label':'Household Char.', 'value': 'RPL_THEME2'},
-                        {'label':'Race/Eth Minority', 'value': 'RPL_THEME3'},
-                        {'label':'Housing and Transportation', 'value': 'RPL_THEME4'},
-                        {'label':'Povery Flag', 'value': 'F_POV150'},
-                        {'label':'Uninsured Flag', 'value': 'F_UNINSUR'},
-                        {'label':'65+ Flag', 'value': 'F_AGE65'},
-                        ], inline=True,
-            ),
-        ),
+        # dbc.Row(dcc.RadioItems(
+        #         id='radio',
+        #         options=[
+        #                 {'label':'S.E. Status', 'value': 'RPL_THEME1'},
+        #                 {'label':'Household Char.', 'value': 'RPL_THEME2'},
+        #                 {'label':'Race/Eth Minority', 'value': 'RPL_THEME3'},
+        #                 {'label':'Housing and Transportation', 'value': 'RPL_THEME4'},
+        #                 {'label':'Povery Flag', 'value': 'F_POV150'},
+        #                 {'label':'Uninsured Flag', 'value': 'F_UNINSUR'},
+        #                 {'label':'65+ Flag', 'value': 'F_AGE65'},
+        #                 ], inline=True,
+        #     ),
+        # ),
+
         dbc.Row([
+            dbc.Col([
+                dcc.RadioItems(
+                    id='radio',
+                    options=[
+                        {'label': 'Total', 'value': 'Total'},
+                        {'label': 'Pct.', 'value': 'Pct'},
+                    ] 
+                ),
+            ], width=6),
             dbc.Col([
                 dcc.Dropdown(
                     id='dropdown',
