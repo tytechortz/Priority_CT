@@ -6,7 +6,7 @@ import pandas as pd
 import dash_ag_grid as dag
 
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
+app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.DARKLY])
 
 bgcolor = "#f3f3f1"  # mapbox light map land color
 
@@ -23,8 +23,10 @@ df_SVI = pd.read_csv('Colorado_SVI.csv')
 # print(df_SVI.columns)
 col_list = list(df_SVI)
 # print(col_list)
-categories = list(filter(lambda x: not x.startswith('M'), col_list))
-categories = categories[8:]
+# categories = ['Total', 'Pct.', 'Percentile', 'Flag']
+# categories = list(filter(lambda x: not x.startswith('M'), col_list))
+# variables = list(lambda x: x, col_list)
+# categories = categories[8:]
 # print(categories)
 
 columnDefs = [
@@ -99,9 +101,9 @@ app.layout = dbc.Container(
         dbc.Row([
             dbc.Col([
                 dcc.RadioItems(
-                    id='radio',
+                    id='category-radio',
                     options=[
-                        {'label': 'Total', 'value': 'Total'},
+                        {'label': 'Total', 'value': 'E_'},
                         {'label': 'Pct.', 'value': 'Pct'},
                         {'label': 'Percentile', 'value': 'Percentile'},
                         {'label': 'Flag', 'value': 'Flag'},
@@ -110,10 +112,10 @@ app.layout = dbc.Container(
             ], width=6),
             dbc.Col([
                 dcc.Dropdown(
-                    id='dropdown',
-                    options=[
-                        {'label': i, 'value': i} for i in categories
-                    ] 
+                    id='variable-dropdown',
+                    # options=[
+                    #     {'label': i, 'value': i} for i in categories
+                    # ] 
                 ),
             ], width=6)
         ]),
@@ -133,8 +135,19 @@ app.layout = dbc.Container(
 
 
 @app.callback(
+        Output('variable-dropdown', 'options'),
+        Input('category-radio', 'value')
+)
+def category_options(selected_value):
+    print(selected_value)
+    # variables = list(lambda x: x, col_list)
+    variables = [{'label': i, 'value': i} for i in list(filter(lambda x: x.startswith(selected_value), col_list))]
+    # print([{'label': i, 'value': i} for i in col_list[filter(lambda x: x.startswith(selected_value))]])
+    return variables 
+
+@app.callback(
     Output('map-data', 'data'),
-    Input('radio', 'value'),
+    Input('variable-dropdown', 'value'),
 )
 def get_data(radio):
     # if radio == 'Total':
@@ -161,7 +174,7 @@ def get_data(radio):
 @app.callback(
     Output('ct-map', 'figure'),
     Input('map-data', 'data'),
-    Input('dropdown', 'value'),
+    Input('variable-dropdown', 'value'),
     Input('opacity', 'value')
 )
 def get_figure(selected_data, radio, opacity):
