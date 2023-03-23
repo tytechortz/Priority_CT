@@ -104,7 +104,7 @@ app.layout = dbc.Container(
                     id='category-radio',
                     options=[
                         {'label': 'Total', 'value': 'E_'},
-                        {'label': 'Pct.', 'value': 'Pct'},
+                        {'label': 'Pct.', 'value': 'EP_'},
                         {'label': 'Percentile', 'value': 'Percentile'},
                         {'label': 'Flag', 'value': 'Flag'},
                     ] 
