@@ -106,7 +106,7 @@ app.layout = dbc.Container(
                         {'label': 'Total', 'value': 'E_'},
                         {'label': 'Pct.', 'value': 'EP_'},
                         {'label': 'Percentile', 'value': 'EPL_'},
-                        {'label': 'Flag', 'value': 'Flag'},
+                        {'label': 'Flag', 'value': 'F_'},
                     ] 
                 ),
             ], width=6),
@@ -150,25 +150,10 @@ def category_options(selected_value):
     Input('variable-dropdown', 'value'),
 )
 def get_data(radio):
-    # if radio == 'Total':
-    #     cat = 'E_'
-    # elif radio == 'Pct':
-    #     cat = 'EP_'
-    # elif radio == 'Percentile':
-    #     cat = 'EPL_'
-    # elif radio == 'Flag':
-    #     cat = 'F_'
-
-    #     categories = list(filter(lambda x: x.startswith(cat), col_list))
-    #     categories = categories[8:]
-
 
     df = df_SVI.loc[df_SVI['COUNTY'] == 'Arapahoe']
     print(df)
-    # df = df_SVI[df_SVI[]]
-    # if radio == 'S.E. Status':
-
-    #     df = df_SVI[df_SVI['THEME'] == 1]
+   
     return df.to_json()
 
 @app.callback(
@@ -177,14 +162,14 @@ def get_data(radio):
     Input('variable-dropdown', 'value'),
     Input('opacity', 'value')
 )
-def get_figure(selected_data, radio, opacity):
+def get_figure(selected_data, dropdown, opacity):
     # sel_dict = selected_row[0]
     # del sel_dict['Label']
     # print(sel_dict)
     df = pd.read_json(selected_data)
     df['FIPS'] = df["FIPS"].astype(str)
     
-    selection = radio
+    selection = dropdown
     
     # df2 = pd.DataFrame.from_dict(sel_dict, orient='index', columns=['Count'])
     # df2 = df2.iloc[1: , :]
