@@ -79,7 +79,14 @@ app.layout = dbc.Container(
                     min = 0,
                     max = 1,
                     value = 1,
-                    # marks = {i for i in range(2020,2022)}
+                ),
+            ], width=6),
+            dbc.Col([
+                dcc.Slider(
+                    id = 'year',
+                    min = 2016,
+                    max = 2020,
+                    value = 2020,
                 ),
             ], width=6),
         ]),
