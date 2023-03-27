@@ -18,10 +18,12 @@ gdf = gpd.read_file('ArapahoeCT.shp')
 # print(gdf)
 
 
-df_SVI = pd.read_csv('Colorado_SVI.csv')
+df_SVI_2020 = pd.read_csv('Colorado_SVI_2020.csv')
+df_SVI_2018 = pd.read_csv('Colorado_SVI_2018.csv')
+df_SVI_2016 = pd.read_csv('Colorado_SVI_2016.csv')
 # df_SVI = df_SVI.iloc[:, []]
 # print(df_SVI.columns)
-col_list = list(df_SVI)
+col_list = list(df_SVI_2020)
 # print(col_list)
 # categories = ['Total', 'Pct.', 'Percentile', 'Flag']
 # categories = list(filter(lambda x: not x.startswith('M'), col_list))
@@ -49,7 +51,7 @@ table = dag.AgGrid(
     id='ct-grid',
     className="ag-theme-alpine-dark",
     columnDefs=columnDefs,
-    rowData=df_SVI.to_dict("records"),
+    rowData=df_SVI_2020.to_dict("records"),
     columnSize="sizeToFit",
     defaultColDef=defaultColDef,
     # cellStyle=cellStyle,
@@ -151,10 +153,10 @@ def category_options(selected_value):
 )
 def get_data(radio):
 
-    df = df_SVI.loc[df_SVI['COUNTY'] == 'Arapahoe']
-    print(df)
+    df_2020 = df_SVI_2020.loc[df_SVI_2020['COUNTY'] == 'Arapahoe']
+    df_2018 = df_SVI_2018.loc[df_SVI_2018['COUNTY'] == 'Arapahoe']
    
-    return df.to_json()
+    return df_2020.to_json()
 
 @app.callback(
     Output('ct-map', 'figure'),
