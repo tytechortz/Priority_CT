@@ -21,15 +21,9 @@ gdf = gpd.read_file('ArapahoeCT.shp')
 df_SVI_2020 = pd.read_csv('Colorado_SVI_2020.csv')
 df_SVI_2018 = pd.read_csv('Colorado_SVI_2018.csv')
 df_SVI_2016 = pd.read_csv('Colorado_SVI_2016.csv')
-# df_SVI = df_SVI.iloc[:, []]
-# print(df_SVI.columns)
+
 col_list = list(df_SVI_2020)
-# print(col_list)
-# categories = ['Total', 'Pct.', 'Percentile', 'Flag']
-# categories = list(filter(lambda x: not x.startswith('M'), col_list))
-# variables = list(lambda x: x, col_list)
-# categories = categories[8:]
-# print(categories)
+
 
 columnDefs = [
     {
@@ -89,28 +83,6 @@ app.layout = dbc.Container(
                 ),
             ], width=6),
         ]),
-        # dbc.Row(dcc.Slider(
-        #         id = 'opacity',
-        #         min = 0,
-        #         max = 1,
-        #         value = 1,
-        #         # marks = {i for i in range(2020,2022)}
-        #     ),
-        # ),
-        # dbc.Row(dcc.RadioItems(
-        #         id='radio',
-        #         options=[
-        #                 {'label':'S.E. Status', 'value': 'RPL_THEME1'},
-        #                 {'label':'Household Char.', 'value': 'RPL_THEME2'},
-        #                 {'label':'Race/Eth Minority', 'value': 'RPL_THEME3'},
-        #                 {'label':'Housing and Transportation', 'value': 'RPL_THEME4'},
-        #                 {'label':'Povery Flag', 'value': 'F_POV150'},
-        #                 {'label':'Uninsured Flag', 'value': 'F_UNINSUR'},
-        #                 {'label':'65+ Flag', 'value': 'F_AGE65'},
-        #                 ], inline=True,
-        #     ),
-        # ),
-
         dbc.Row([
             dbc.Col([
                 dcc.RadioItems(
@@ -126,25 +98,13 @@ app.layout = dbc.Container(
             dbc.Col([
                 dcc.Dropdown(
                     id='variable-dropdown',
-                    # options=[
-                    #     {'label': i, 'value': i} for i in categories
-                    # ] 
                 ),
             ], width=6)
         ]),
-        # dbc.Row(dcc.Dropdown(
-        #         id='dropdown',
-        #         options=[
-        #             {'label': i, 'value': i} for i in categories
-        #         ]             
-        #     ),
-        # ),
-        
         # dbc.Row(dbc.Col(table, className="py-4")),
         dcc.Store(id='map-data', storage_type='session'),
     ],
 )
-
 
 
 @app.callback(
@@ -176,25 +136,16 @@ def get_data(radio):
     Input('opacity', 'value')
 )
 def get_figure(selected_data, dropdown, opacity):
-    # sel_dict = selected_row[0]
-    # del sel_dict['Label']
-    # print(sel_dict)
+  
     df = pd.read_json(selected_data)
     df['FIPS'] = df["FIPS"].astype(str)
     
     selection = dropdown
     
-    # df2 = pd.DataFrame.from_dict(sel_dict, orient='index', columns=['Count'])
-    # df2 = df2.iloc[1: , :]
-    # df2.index.names = ['FIPS']
     tgdf = gdf.merge(df, on='FIPS')
-    # tgdf['Count'] = tgdf['Count'].str.replace(",", "")
-    # tgdf.fillna(0,inplace=True)
-    # tgdf['Count'] = (tgdf['Count'].astype(int))
+   
     tgdf = tgdf.set_index('FIPS')
-    # print(tgdf)
-
-    
+  
 
     fig = px.choropleth_mapbox(tgdf, 
                                 geojson=tgdf.geometry, 
