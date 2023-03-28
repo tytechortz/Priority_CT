@@ -74,11 +74,12 @@ app.layout = dbc.Container(
         dbc.Row(dcc.Graph(id='ct-map', figure=blank_fig(500))),
         dbc.Row([
             dbc.Col([
-                dcc.Slider(
+                dcc.Slider(0, 1, value=1,
+                    marks={
+                        0: {'label': 'Light', 'style': {'color': 'white'}},
+                        1: {'label': 'Dark', 'style': {'color': 'white'}},
+                    },
                     id = 'opacity',
-                    min = 0,
-                    max = 1,
-                    value = 1,
                 ),
             ], width=6),
             dbc.Col([
