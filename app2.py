@@ -82,11 +82,13 @@ app.layout = dbc.Container(
                 ),
             ], width=6),
             dbc.Col([
-                dcc.Slider(
+                dcc.Slider(2016, 2020, value=2020,
+                    marks={
+                        2016: {'label': '2016'},
+                        2018: {'label': '2018'},
+                        2020: {'label': '2020'},
+                    },
                     id = 'year',
-                    min = 2016,
-                    max = 2020,
-                    value = 2020,
                 ),
             ], width=6),
         ]),
