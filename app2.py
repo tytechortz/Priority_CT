@@ -10,7 +10,7 @@ app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[db
 
 bgcolor = "#f3f3f1"  # mapbox light map land color
 
-header = html.Div("Arapahoe Census Tract Data", className="h2 p-2 text-white bg-primary text-center")
+header = html.Div("Arapahoe Census Tract SVI Data", className="h2 p-2 text-white bg-primary text-center")
 
 template = {"layout": {"paper_bgcolor": bgcolor, "plot_bgcolor": bgcolor}}
 
