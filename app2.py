@@ -14,7 +14,7 @@ header = html.Div("Arapahoe Census Tract Data", className="h2 p-2 text-white bg-
 
 template = {"layout": {"paper_bgcolor": bgcolor, "plot_bgcolor": bgcolor}}
 
-gdf = gpd.read_file('ArapahoeCT.shp')
+gdf = gpd.read_file('2020_CT/ArapahoeCT.shp')
 gdf_2016 = gpd.read_file('tl_2016_08_tract/tl_2016_08_tract.shp')
 gdf_2016 = gdf_2016.loc[gdf_2016['COUNTYFP'] == '005']
 gdf_2016.rename(columns = {'GEOID':'FIPS'}, inplace=True)
