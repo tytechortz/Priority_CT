@@ -6,3 +6,5 @@ data
 data/**
 /data
 .csv
+.ipynb
+.ipynb_checkpoints

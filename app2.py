@@ -15,12 +15,17 @@ header = html.Div("Arapahoe Census Tract Data", className="h2 p-2 text-white bg-
 template = {"layout": {"paper_bgcolor": bgcolor, "plot_bgcolor": bgcolor}}
 
 gdf = gpd.read_file('ArapahoeCT.shp')
-# print(gdf)
+gdf_2016 = gpd.read_file('tl_2016_08_tract/tl_2016_08_tract.shp')
+gdf_2016 = gdf_2016.loc[gdf_2016['COUNTYFP'] == '005']
+gdf_2016.rename(columns = {'GEOID':'FIPS'}, inplace=True)
+gdf_2016['FIPS'] = gdf_2016['FIPS'].apply(lambda x: x[1:])
+print(gdf_2016)
 
 
 df_SVI_2020 = pd.read_csv('Colorado_SVI_2020.csv')
 df_SVI_2018 = pd.read_csv('Colorado_SVI_2018.csv')
 df_SVI_2016 = pd.read_csv('Colorado_SVI_2016.csv')
+
 
 col_list = list(df_SVI_2020)
 
@@ -119,6 +124,7 @@ app.layout = dbc.Container(
                 ),
             ], width=6)
         ]),
+        dbc.Row(dcc.Graph(id='ct-2016-map', figure=blank_fig(500))),
         # dbc.Row(dbc.Col(table, className="py-4")),
         dcc.Store(id='map-data', storage_type='session'),
     ],
@@ -161,6 +167,42 @@ def get_figure(selected_data, dropdown, opacity):
     selection = dropdown
     
     tgdf = gdf.merge(df, on='FIPS')
+   
+    tgdf = tgdf.set_index('FIPS')
+  
+
+    fig = px.choropleth_mapbox(tgdf, 
+                                geojson=tgdf.geometry, 
+                                color=selection,                               
+                                locations=tgdf.index, 
+                                # featureidkey="properties.TRACTCE20",
+                                opacity=opacity)
+
+    fig.update_layout(mapbox_style="carto-positron", 
+                      mapbox_zoom=10.4,
+                      mapbox_center={"lat": 39.65, "lon": -104.8},
+                      margin={"r":0,"t":0,"l":0,"b":0},
+                      uirevision='constant')
+
+
+    return fig
+
+@app.callback(
+    Output('ct-2016-map', 'figure'),
+    Input('map-data', 'data'),
+    Input('variable-dropdown', 'value'),
+    Input('opacity', 'value')
+)
+def get_figure(selected_data, dropdown, opacity):
+  
+    # df = pd.read_json(selected_data)
+    # df['FIPS'] = df["FIPS"].astype(str)
+    df = df_SVI_2016
+    df['FIPS'] = df["FIPS"].astype(str)
+    
+    selection = dropdown
+    
+    tgdf = gdf_2016.merge(df, on='FIPS')
    
     tgdf = tgdf.set_index('FIPS')
   
