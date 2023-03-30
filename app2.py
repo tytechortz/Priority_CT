@@ -4,6 +4,7 @@ import geopandas as gpd
 import plotly.express as px
 import pandas as pd
 import dash_ag_grid as dag
+import functools as ft
 
 
 app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.DARKLY])
@@ -19,7 +20,7 @@ gdf_2016 = gpd.read_file('tl_2016_08_tract/tl_2016_08_tract.shp')
 gdf_2016 = gdf_2016.loc[gdf_2016['COUNTYFP'] == '005']
 gdf_2016.rename(columns = {'GEOID':'FIPS'}, inplace=True)
 gdf_2016['FIPS'] = gdf_2016['FIPS'].apply(lambda x: x[1:])
-print(gdf_2016)
+# print(gdf_2016)
 
 
 df_SVI_2020 = pd.read_csv('Colorado_SVI_2020.csv')
@@ -29,6 +30,10 @@ df_SVI_2018['YEAR'] = 2018
 df_SVI_2016 = pd.read_csv('Colorado_SVI_2016.csv')
 df_SVI_2016['YEAR'] = 2016
 
+
+dfs = [df_SVI_2020, df_SVI_2018, df_SVI_2016] 
+df = pd.concat(dfs, ignore_index=True, sort=False)
+print(df)
 
 col_list = list(df_SVI_2020)
 
@@ -147,14 +152,16 @@ def category_options(selected_value):
 
 @app.callback(
     Output('map-data', 'data'),
-    Input('variable-dropdown', 'value'),
+    Input('year', 'value'),
 )
-def get_data(radio):
-
+def get_data(year):
+    print(year)
+    df_TOTAL = df.loc[df['YEAR'] == year]
+    print(df_TOTAL)
     df_2020 = df_SVI_2020.loc[df_SVI_2020['COUNTY'] == 'Arapahoe']
     df_2018 = df_SVI_2018.loc[df_SVI_2018['COUNTY'] == 'Arapahoe']
    
-    return df_2020.to_json()
+    return df_TOTAL.to_json()
 
 @app.callback(
     Output('ct-map', 'figure'),
