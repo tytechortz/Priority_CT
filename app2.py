@@ -21,7 +21,10 @@ gdf_2016 = gdf_2016.loc[gdf_2016['COUNTYFP'] == '005']
 gdf_2016.rename(columns = {'GEOID':'FIPS'}, inplace=True)
 gdf_2016['FIPS'] = gdf_2016['FIPS'].apply(lambda x: x[1:])
 print(gdf_2016)
-
+gdf_2018 = gpd.read_file('tl_2018_08_tract/tl_2018_08_tract.shp')
+gdf_2018 = gdf_2018.loc[gdf_2018['COUNTYFP'] == '005']
+gdf_2018.rename(columns = {'GEOID':'FIPS'}, inplace=True)
+gdf_2018['FIPS'] = gdf_2018['FIPS'].apply(lambda x: x[1:])
 
 df_SVI_2020 = pd.read_csv('Colorado_SVI_2020.csv')
 df_SVI_2020['YEAR'] = 2020
@@ -167,17 +170,24 @@ def get_data(year):
     Output('ct-map', 'figure'),
     Input('map-data', 'data'),
     Input('variable-dropdown', 'value'),
+    Input('year', 'value'),
     Input('opacity', 'value')
 )
-def get_figure(selected_data, dropdown, opacity):
+def get_figure(selected_data, dropdown, year, opacity):
   
     df = pd.read_json(selected_data)
+    # df['FIPS'] = df["FIPS"].astype(str)
+    # df = df_SVI_2016
     df['FIPS'] = df["FIPS"].astype(str)
     
     selection = dropdown
     
-    tgdf = gdf.merge(df, on='FIPS')
-   
+    if year == 2016:
+        tgdf = gdf_2016.merge(df, on='FIPS')
+    elif year == 2018:
+        tgdf = gdf_2018.merge(df, on='FIPS')
+    else:
+        tgdf = gdf_2020.merge(df, on='FIPS')
     tgdf = tgdf.set_index('FIPS')
   
 
