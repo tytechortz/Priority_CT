@@ -23,8 +23,11 @@ print(gdf_2016)
 
 
 df_SVI_2020 = pd.read_csv('Colorado_SVI_2020.csv')
+df_SVI_2020['YEAR'] = 2020
 df_SVI_2018 = pd.read_csv('Colorado_SVI_2018.csv')
+df_SVI_2018['YEAR'] = 2018
 df_SVI_2016 = pd.read_csv('Colorado_SVI_2016.csv')
+df_SVI_2016['YEAR'] = 2016
 
 
 col_list = list(df_SVI_2020)
