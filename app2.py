@@ -22,7 +22,7 @@ gdf_2016 = gpd.read_file('tl_2016_08_tract/tl_2016_08_tract.shp')
 gdf_2016 = gdf_2016.loc[gdf_2016['COUNTYFP'] == '005']
 gdf_2016.rename(columns = {'GEOID':'FIPS'}, inplace=True)
 gdf_2016['FIPS'] = gdf_2016['FIPS'].apply(lambda x: x[1:])
-print(gdf_2016)
+# print(gdf_2016)
 gdf_2018 = gpd.read_file('tl_2018_08_tract/tl_2018_08_tract.shp')
 gdf_2018 = gdf_2018.loc[gdf_2018['COUNTYFP'] == '005']
 gdf_2018.rename(columns = {'GEOID':'FIPS'}, inplace=True)
@@ -38,7 +38,7 @@ df_SVI_2016['YEAR'] = 2016
 
 dfs = [df_SVI_2020, df_SVI_2018, df_SVI_2016] 
 df = pd.concat(dfs, ignore_index=True, sort=False)
-print(df)
+# print(df)
 
 col_list = list(df_SVI_2020)
 
@@ -162,7 +162,7 @@ def category_options(selected_value):
 def get_data(year):
     print(year)
     df_TOTAL = df.loc[df['YEAR'] == year]
-    print(df_TOTAL)
+    # print(df_TOTAL)
     df_2020 = df_SVI_2020.loc[df_SVI_2020['COUNTY'] == 'Arapahoe']
     df_2018 = df_SVI_2018.loc[df_SVI_2018['COUNTY'] == 'Arapahoe']
    
@@ -224,7 +224,7 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     df['FIPS'] = df["FIPS"].astype(str)
     
     selection = dropdown
-    print(df)
+    # print(df)
     
     if year == 2016:
         tgdf = gdf_2016.merge(df, on='FIPS')
@@ -233,12 +233,12 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     elif year == 2020:
         tgdf = gdf_2020.merge(df, on='FIPS')
     f_tgdf = tgdf.set_index('FIPS')
-    print(f_tgdf.columns)
-    print(f_tgdf)
+    # print(f_tgdf.columns)
+    # print(f_tgdf)
     # fig = ()
     # gdf = gdf_2020.to_crs("WGS84")
     gdf = json.loads(f_tgdf.to_json())
-    print(list(tgdf.columns))
+    # print(list(tgdf.columns))
    
 
     fig = go.Figure(go.Choroplethmapbox(geojson=gdf, locations=df.FIPS, z=df['E_TOTPOP'],
