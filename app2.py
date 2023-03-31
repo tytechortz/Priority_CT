@@ -128,6 +128,8 @@ app.layout = dbc.Container(
                         {'label': 'Pct.', 'value': 'EP_'},
                         {'label': 'Percentile', 'value': 'EPL_'},
                         {'label': 'Flag', 'value': 'F_'},
+                        {'label': '2 Year Change', 'value': 2},
+                        {'label': '4 Year Change', 'value': 4},
                     ] 
                 ),
             ], width=6),
