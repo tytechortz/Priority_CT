@@ -237,11 +237,11 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     print(type(selection))
     
     if year == 2016:
-        tgdf = gdf_2016.merge(df, on='FIPS')
+        tgdf = gdf_2016.merge(df_all, on='FIPS')
     elif year == 2018:
-        tgdf = gdf_2018.merge(df, on='FIPS')
+        tgdf = gdf_2018.merge(df_all, on='FIPS')
     elif year == 2020:
-        tgdf = gdf_2020.merge(df, on='FIPS')
+        tgdf = gdf_2020.merge(df_all, on='FIPS')
     f_tgdf = tgdf.set_index('FIPS')
    
     gdf = json.loads(f_tgdf.to_json())
