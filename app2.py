@@ -221,7 +221,7 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     df = pd.read_json(selected_data)
  
     df['FIPS'] = df["FIPS"].astype(str)
-    
+    print(df)
     selection = dropdown
 
     print(type(selection))
@@ -236,25 +236,33 @@ def get_figure_b(selected_data, dropdown, year, opacity):
    
     gdf = json.loads(f_tgdf.to_json())
     # print(list(tgdf.columns))
+
+    if selection is None:
+        fig = px.choropleth_mapbox(tgdf, 
+                                geojson=tgdf.geometry, 
+                                color=selection,                               
+                                locations=tgdf.index, 
+                                # featureidkey="properties.TRACTCE20",
+                                opacity=opacity)
    
+    else:
+        fig = go.Figure(
+            go.Choroplethmapbox(geojson=gdf, 
+                locations=df.FIPS, 
+                z=df[selection],
+                colorscale="Electric",
+                zmax = 10000, 
+                zmin = 0,
+                marker_opacity=opacity, 
+                marker_line_width=.5))
+    
 
-    fig = go.Figure(
-        go.Choroplethmapbox(geojson=gdf, 
-            locations=df.FIPS, 
-            z=df[selection],
-            colorscale="Electric",
-            zmax = 10000, 
-            zmin = 0,
-            marker_opacity=opacity, 
-            marker_line_width=.5))
-  
-
-  
+    
     fig.update_layout(mapbox_style="carto-positron", 
-                      mapbox_zoom=10.4,
-                      mapbox_center={"lat": 39.65, "lon": -104.8},
-                      margin={"r":0,"t":0,"l":0,"b":0},
-                      uirevision='constant')
+                    mapbox_zoom=10.4,
+                    mapbox_center={"lat": 39.65, "lon": -104.8},
+                    margin={"r":0,"t":0,"l":0,"b":0},
+                    uirevision='constant')
 
 
     return fig
