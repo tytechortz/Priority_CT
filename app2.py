@@ -4,8 +4,13 @@ import geopandas as gpd
 import plotly.express as px
 import pandas as pd
 import dash_ag_grid as dag
-import functools as ft
+import plotly.graph_objects as go
+from urllib.request import urlopen
+import json
 
+
+with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
+    counties = json.load(response)
 
 app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.DARKLY])
 
@@ -214,7 +219,7 @@ def get_figure(selected_data, dropdown, year, opacity):
     Input('year', 'value'),
     Input('opacity', 'value')
 )
-def get_figure(selected_data, dropdown, year, opacity):
+def get_figure_b(selected_data, dropdown, year, opacity):
   
     df = pd.read_json(selected_data)
     # df['FIPS'] = df["FIPS"].astype(str)
@@ -222,22 +227,42 @@ def get_figure(selected_data, dropdown, year, opacity):
     df['FIPS'] = df["FIPS"].astype(str)
     
     selection = dropdown
+    print(df)
     
     if year == 2016:
         tgdf = gdf_2016.merge(df, on='FIPS')
     elif year == 2018:
         tgdf = gdf_2018.merge(df, on='FIPS')
-    else:
+    elif year == 2020:
         tgdf = gdf_2020.merge(df, on='FIPS')
-    tgdf = tgdf.set_index('FIPS')
+    f_tgdf = tgdf.set_index('FIPS')
+    print(f_tgdf.columns)
+    print(f_tgdf)
+    # fig = ()
+    # gdf = gdf_2020.to_crs("WGS84")
+    gdf = json.loads(f_tgdf.to_json())
+    print(list(tgdf.columns))
+    # fig = go.Figure(
+    #     go.Choroplethmapbox(
+    #         geojson=tgdf,
+    #         locations=f_tgdf.geometry,
+    #         # z=f_tgdf.E_CROWD
+    #     )
+    # # )
+    # df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/fips-unemp-16.csv",
+    #                dtype={"fips": str})
+
+    fig = go.Figure(go.Choroplethmapbox(geojson=gdf, locations=df.FIPS, z=df['E_TOTPOP'],
+                                    colorscale="Viridis", 
+                                    marker_opacity=opacity, marker_line_width=.5))
   
 
-    fig = px.choropleth_mapbox(tgdf, 
-                                geojson=tgdf.geometry, 
-                                color=selection,                               
-                                locations=tgdf.index, 
-                                # featureidkey="properties.TRACTCE20",
-                                opacity=opacity)
+    # fig = px.choropleth_mapbox(tgdf, 
+    #                             geojson=tgdf.geometry, 
+    #                             color=selection,                               
+    #                             locations=tgdf.index, 
+    #                             # featureidkey="properties.TRACTCE20",
+    #                             opacity=opacity)
 
     fig.update_layout(mapbox_style="carto-positron", 
                       mapbox_zoom=10.4,
