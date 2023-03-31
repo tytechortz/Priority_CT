@@ -9,9 +9,6 @@ from urllib.request import urlopen
 import json
 
 
-with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
-    counties = json.load(response)
-
 app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.DARKLY])
 
 bgcolor = "#f3f3f1"  # mapbox light map land color
