@@ -219,8 +219,7 @@ def get_figure(selected_data, dropdown, year, opacity):
 def get_figure_b(selected_data, dropdown, year, opacity):
   
     df = pd.read_json(selected_data)
-    # df['FIPS'] = df["FIPS"].astype(str)
-    # df = df_SVI_2016
+ 
     df['FIPS'] = df["FIPS"].astype(str)
     
     selection = dropdown
@@ -233,10 +232,7 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     elif year == 2020:
         tgdf = gdf_2020.merge(df, on='FIPS')
     f_tgdf = tgdf.set_index('FIPS')
-    # print(f_tgdf.columns)
-    # print(f_tgdf)
-    # fig = ()
-    # gdf = gdf_2020.to_crs("WGS84")
+   
     gdf = json.loads(f_tgdf.to_json())
     # print(list(tgdf.columns))
    
