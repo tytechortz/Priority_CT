@@ -144,7 +144,8 @@ app.layout = dbc.Container(
                     options=[
                         {'label': '2 Year Change', 'value': 2},
                         {'label': '4 Year Change', 'value': 4},
-                    ] 
+                    ],
+                    value=2,
                 ),
             ], width=6),
         ]),
