@@ -223,7 +223,8 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     df['FIPS'] = df["FIPS"].astype(str)
     
     selection = dropdown
-    # print(df)
+
+    print(type(selection))
     
     if year == 2016:
         tgdf = gdf_2016.merge(df, on='FIPS')
@@ -237,9 +238,15 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     # print(list(tgdf.columns))
    
 
-    fig = go.Figure(go.Choroplethmapbox(geojson=gdf, locations=df.FIPS, z=df['E_TOTPOP'],
-                                    colorscale="Viridis", 
-                                    marker_opacity=opacity, marker_line_width=.5))
+    fig = go.Figure(
+        go.Choroplethmapbox(geojson=gdf, 
+            locations=df.FIPS, 
+            z=df[selection],
+            colorscale="Electric",
+            zmax = 10000, 
+            zmin = 0,
+            marker_opacity=opacity, 
+            marker_line_width=.5))
   
 
   
