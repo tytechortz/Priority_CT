@@ -128,8 +128,6 @@ app.layout = dbc.Container(
                         {'label': 'Pct.', 'value': 'EP_'},
                         {'label': 'Percentile', 'value': 'EPL_'},
                         {'label': 'Flag', 'value': 'F_'},
-                        {'label': '2 Year Change', 'value': 2},
-                        {'label': '4 Year Change', 'value': 4},
                     ] 
                 ),
             ], width=6),
@@ -138,6 +136,17 @@ app.layout = dbc.Container(
                     id='variable-dropdown',
                 ),
             ], width=6)
+        ]),
+        dbc.Row([
+            dbc.Col([
+                dcc.RadioItems(
+                    id='change-radio',
+                    options=[
+                        {'label': '2 Year Change', 'value': 2},
+                        {'label': '4 Year Change', 'value': 4},
+                    ] 
+                ),
+            ], width=6),
         ]),
         dbc.Row(dcc.Graph(id='ct-2016-map', figure=blank_fig(500))),
         # dbc.Row(dbc.Col(table, className="py-4")),
@@ -224,10 +233,11 @@ def get_figure(selected_data, dropdown, year, opacity):
     Output('ct-2016-map', 'figure'),
     Input('all-map-data', 'data'),
     Input('variable-dropdown', 'value'),
+    Input('change-radio', 'value'),
     Input('year', 'value'),
     Input('opacity', 'value')
 )
-def get_figure_b(selected_data, dropdown, year, opacity):
+def get_figure_b(selected_data, dropdown, change, year, opacity):
   
     # df = pd.read_json(selected_data)
     df_all = pd.read_json(selected_data)
@@ -260,8 +270,8 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     else:
         fig = go.Figure(
             go.Choroplethmapbox(geojson=gdf, 
-                locations=df.FIPS, 
-                z=df[selection],
+                locations=df_all.FIPS, 
+                z=df_all[selection],
                 # colorscale="Electric",
                 # zmax = 15, 
                 # zmin = 0,
