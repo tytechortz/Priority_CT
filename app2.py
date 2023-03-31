@@ -242,28 +242,14 @@ def get_figure_b(selected_data, dropdown, year, opacity):
     # gdf = gdf_2020.to_crs("WGS84")
     gdf = json.loads(f_tgdf.to_json())
     print(list(tgdf.columns))
-    # fig = go.Figure(
-    #     go.Choroplethmapbox(
-    #         geojson=tgdf,
-    #         locations=f_tgdf.geometry,
-    #         # z=f_tgdf.E_CROWD
-    #     )
-    # # )
-    # df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/fips-unemp-16.csv",
-    #                dtype={"fips": str})
+   
 
     fig = go.Figure(go.Choroplethmapbox(geojson=gdf, locations=df.FIPS, z=df['E_TOTPOP'],
                                     colorscale="Viridis", 
                                     marker_opacity=opacity, marker_line_width=.5))
   
 
-    # fig = px.choropleth_mapbox(tgdf, 
-    #                             geojson=tgdf.geometry, 
-    #                             color=selection,                               
-    #                             locations=tgdf.index, 
-    #                             # featureidkey="properties.TRACTCE20",
-    #                             opacity=opacity)
-
+  
     fig.update_layout(mapbox_style="carto-positron", 
                       mapbox_zoom=10.4,
                       mapbox_center={"lat": 39.65, "lon": -104.8},
