@@ -139,7 +139,8 @@ app.layout = dbc.Container(
         ]),
         dbc.Row(dcc.Graph(id='ct-2016-map', figure=blank_fig(500))),
         # dbc.Row(dbc.Col(table, className="py-4")),
-        dcc.Store(id='map-data', storage_type='session'),
+        dcc.Store(id='year-map-data', storage_type='session'),
+        dcc.Store(id='all-map-data', storage_type='session'),
     ],
 )
 
@@ -156,21 +157,29 @@ def category_options(selected_value):
     return variables 
 
 @app.callback(
-    Output('map-data', 'data'),
+    Output('year-map-data', 'data'),
     Input('year', 'value'),
 )
 def get_data(year):
     print(year)
     df_TOTAL = df.loc[df['YEAR'] == year]
-    # print(df_TOTAL)
-    df_2020 = df_SVI_2020.loc[df_SVI_2020['COUNTY'] == 'Arapahoe']
-    df_2018 = df_SVI_2018.loc[df_SVI_2018['COUNTY'] == 'Arapahoe']
    
     return df_TOTAL.to_json()
 
 @app.callback(
+    Output('all-map-data', 'data'),
+    Input('year', 'value'),
+)
+def get_data_all(year):
+    
+    df_all = df.loc[df['COUNTY'] == 'Arapahoe']
+   
+   
+    return df_all.to_json()
+
+@app.callback(
     Output('ct-map', 'figure'),
-    Input('map-data', 'data'),
+    Input('year-map-data', 'data'),
     Input('variable-dropdown', 'value'),
     Input('year', 'value'),
     Input('opacity', 'value')
@@ -211,17 +220,18 @@ def get_figure(selected_data, dropdown, year, opacity):
 
 @app.callback(
     Output('ct-2016-map', 'figure'),
-    Input('map-data', 'data'),
+    Input('all-map-data', 'data'),
     Input('variable-dropdown', 'value'),
     Input('year', 'value'),
     Input('opacity', 'value')
 )
 def get_figure_b(selected_data, dropdown, year, opacity):
   
-    df = pd.read_json(selected_data)
- 
-    df['FIPS'] = df["FIPS"].astype(str)
-    print(df)
+    # df = pd.read_json(selected_data)
+    df_all = pd.read_json(selected_data)
+    # print(df_all)
+    df_all['FIPS'] = df_all["FIPS"].astype(str)
+    print(df_all)
     selection = dropdown
 
     print(type(selection))
@@ -250,9 +260,9 @@ def get_figure_b(selected_data, dropdown, year, opacity):
             go.Choroplethmapbox(geojson=gdf, 
                 locations=df.FIPS, 
                 z=df[selection],
-                colorscale="Electric",
-                zmax = 10000, 
-                zmin = 0,
+                # colorscale="Electric",
+                # zmax = 15, 
+                # zmin = 0,
                 marker_opacity=opacity, 
                 marker_line_width=.5))
     
