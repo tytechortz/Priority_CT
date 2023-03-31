@@ -243,7 +243,7 @@ def get_figure_b(selected_data, dropdown, change, year, opacity):
     df_all = pd.read_json(selected_data)
     # print(df_all)
     df_all['FIPS'] = df_all["FIPS"].astype(str)
-    print(df_all)
+    # print(df_all)
     selection = dropdown
 
     print(type(selection))
@@ -263,7 +263,8 @@ def get_figure_b(selected_data, dropdown, change, year, opacity):
 
 
     
-    change_df = df_all.loc
+    change_df = df_all.loc[df_all['YEAR'] == year_delta]
+    print(change_df)
     # print(list(tgdf.columns))
 
     if selection is None:
