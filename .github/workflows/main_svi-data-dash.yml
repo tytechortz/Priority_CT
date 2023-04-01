@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'SVI-Data-Dash'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_574CF2178A75478DAA64103AFD077491 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4044FC9803604033A95763221FE94042 }}
